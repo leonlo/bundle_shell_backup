@@ -23,9 +23,6 @@ CONFIG_EBAO_PROD="Release"
 CONFIG_TSRI_UAT="Tsri-UAT"
 CONFIG_TSRI_PROD="Tsri-Release"
 
-UAT_IDENTITY="iPhone Developer: dewang kong (Q2R5A837S3)"
-PROD_IDENTITY="iPhone Distribution: eBaoTech Corporation (7F8W9K8TTP)"
-
 while getopts "c:p:" Option
 do 
   case $Option in 
