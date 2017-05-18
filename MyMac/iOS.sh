@@ -10,7 +10,7 @@ DATE_TIME="`date +%Y%m%d%s`"
 # ebaoApp Setting
 ###################
 PROJECT_DIR="/Users/leonluo/mcde_app/trunk/ios"
-LOG_PATH="/Users/leonluo"
+#LOG_PATH="/Users/leonluo"
 WORKSPACE_PATH="/Users/leonluo/mcde_app/trunk/ios/McDE.xcworkspace"
 SCHEME_NAME="McDE"
 
@@ -59,6 +59,7 @@ done
 
 
 
+
 if [ $ARCHIVE_CONFIG_NAME = "$CONFIG_EBAO_UAT" ];then
   EXPORT_OPTIONS_PLIST_PATH="$EXPORT_OPTIONS_PLIST_DIR""$OPTION_PLIST_UAT"
 elif [ $ARCHIVE_CONFIG_NAME = "$CONFIG_EBAO_PROD" ];then
@@ -90,8 +91,6 @@ fi
 # build before archive
 xcodebuild -workspace "$WORKSPACE_PATH" -scheme "$SCHEME_NAME" -configuration "$ARCHIVE_CONFIG_NAME"
 
-exit 1
-
 # archive
 xcodebuild archive -workspace "$WORKSPACE_PATH" -scheme "$SCHEME_NAME" -configuration "$ARCHIVE_CONFIG_NAME" -archivePath "$ARCHIVE_PATH"
 
@@ -104,10 +103,22 @@ xcodebuild archive -workspace "$WORKSPACE_PATH" -scheme "$SCHEME_NAME" -configur
 ###################################################################
 xcodebuild -exportArchive -archivePath "$ARCHIVE_PATH"  -exportPath "$IPA_EXPORT_PATH" -exportOptionsPlist "$EXPORT_OPTIONS_PLIST_PATH" 
 
-if [ "$ARCHIVE_CONFIG_NAME" = "$CONFIG_EBAO_UAT" || "$ARCHIVE_CONFIG_NAME" = "$CONFIG_TSRI_UAT" ]; then
+
+if [ -o $ARCHIVE_CONFIG_NAME="$CONFIG_EBAO_UAT" -o $ARCHIVE_CONFIG_NAME="$CONFIG_TSRI_UAT" ]; then
 #upload to fir
-  echo "configuration is $ARCHIVE_CONFIG_NAME."
-fi          
+  pub="y"
+  echo "✈ -------------------------------------------- ✈"
+  echo "Publish to fir, continue ? y(yes), n(no)"
+  read -a pub -n 1 -t 10
+  if [ $pub == "y" -o $pub == "n" ]; then
+    echo "configuration is $ARCHIVE_CONFIG_NAME."
+    fir publish "$IPA_EXPORT_PATH/$SCHEME_NAME.ipa"
+  else 
+    echo "continue ? y(yes), n(no)"
+    read -a pub -n 1
+  fi
+fi
+
 
 
 
