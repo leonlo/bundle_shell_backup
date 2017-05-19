@@ -108,7 +108,7 @@ if [ -o $ARCHIVE_CONFIG_NAME="$CONFIG_EBAO_UAT" -o $ARCHIVE_CONFIG_NAME="$CONFIG
   echo "✈ -------------------------------------------- ✈"
   echo "Publish to fir, continue ? y(yes), n(no)"
   read -a pub -n 1 -t 10
-  if [ $pub == "y" -o $pub == "n" ]; then
+  if [ $pub == "y" ]; then
     echo "configuration is $ARCHIVE_CONFIG_NAME."
     fir publish "$IPA_EXPORT_PATH/$SCHEME_NAME.ipa"
   else 

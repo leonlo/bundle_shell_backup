@@ -3,27 +3,27 @@
 UAT="UAT"
 RELEASE="Release"
 
-containUAT=$(echo $CONFIGURATION | grep $UAT)
-containRelease=$(echo $CONFIGURATION | grep $Release)
+containUAT=$(echo $CONFIGURATION | grep "$UAT")
+containRelease=$(echo $CONFIGURATION | grep "$Release")
 
 echo "$containUAT $containRelease"
 
 if [ "$containRelease" != "" ]; then
-  echo 'Release'
-  ProdVersion=$(/usr/libexec/PlistBuddy -c "Print ProdVersion" "$INFOPLIST_FILE")
-  ProdBuildNumber=$(/usr/libexec/PlistBuddy -c "Print ProdBuildNumber" "$INFOPLIST_FILE")
-  ProdBuildNumber=$(($ProdBuildNumber + 1))
-  /usr/libexec/PlistBuddy -c "Set :ProdBuildNumber $ProdBuildNumber" "$INFOPLIST_FILE"
-  /usr/libexec/PlistBuddy -c "Set :CFBundleVersion $ProdBuildNumber" "$INFOPLIST_FILE"
-  /usr/libexec/PlistBuddy -c "Set :CFBundleShortVersionString $ProdVersion.$ProdBuildNumber" "$INFOPLIST_FILE"
+echo 'Release'
+ProdVersion=$(/usr/libexec/PlistBuddy -c "Print ProdVersion" "$INFOPLIST_FILE")
+ProdBuildNumber=$(/usr/libexec/PlistBuddy -c "Print ProdBuildNumber" "$INFOPLIST_FILE")
+ProdBuildNumber=$(($ProdBuildNumber + 1))
+/usr/libexec/PlistBuddy -c "Set :ProdBuildNumber $ProdBuildNumber" "$INFOPLIST_FILE"
+/usr/libexec/PlistBuddy -c "Set :CFBundleVersion $ProdBuildNumber" "$INFOPLIST_FILE"
+/usr/libexec/PlistBuddy -c "Set :CFBundleShortVersionString $ProdVersion.$ProdBuildNumber" "$INFOPLIST_FILE"
 elif [ "$containUAT" != "" ]; then
-  echo 'UAT'
-  UATVersion=$(/usr/libexec/PlistBuddy -c "Print UATVersion" "$INFOPLIST_FILE")
-  UATBuildNumber=$(/usr/libexec/PlistBuddy -c "Print UATBuildNumber" "$INFOPLIST_FILE")
-  UATBuildNumber=$(($UATBuildNumber + 1))
-  /usr/libexec/PlistBuddy -c "Set :UATBuildNumber $UATBuildNumber" "$INFOPLIST_FILE"
-  /usr/libexec/PlistBuddy -c "Set :CFBundleVersion $UATBuildNumber" "$INFOPLIST_FILE"
-  /usr/libexec/PlistBuddy -c "Set :CFBundleShortVersionString $UATVersion.$UATBuildNumber" "$INFOPLIST_FILE"
+echo 'UAT'
+UATVersion=$(/usr/libexec/PlistBuddy -c "Print UATVersion" "$INFOPLIST_FILE")
+UATBuildNumber=$(/usr/libexec/PlistBuddy -c "Print UATBuildNumber" "$INFOPLIST_FILE")
+UATBuildNumber=$(($UATBuildNumber + 1))
+/usr/libexec/PlistBuddy -c "Set :UATBuildNumber $UATBuildNumber" "$INFOPLIST_FILE"
+/usr/libexec/PlistBuddy -c "Set :CFBundleVersion $UATBuildNumber" "$INFOPLIST_FILE"
+/usr/libexec/PlistBuddy -c "Set :CFBundleShortVersionString $UATVersion.$UATBuildNumber" "$INFOPLIST_FILE"
 # else
 #   UATVersion=$(/usr/libexec/PlistBuddy -c "Print UATVersion" "$INFOPLIST_FILE")
 #   buildNumber=$(/usr/libexec/PlistBuddy -c "Print UATBuildNumber" "$INFOPLIST_FILE")
