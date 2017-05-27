@@ -12,7 +12,7 @@ DATE_TIME="`date +%Y%m%d%s`"
 PROJECT_DIR="/Users/leonluo/mcde_app/trunk/ios"
 #LOG_PATH="/Users/leonluo"
 WORKSPACE_PATH="/Users/leonluo/mcde_app/trunk/ios/McDE.xcworkspace"
-SCHEME_NAME="McDE"
+SCHEME_NAME=""
 
 OPTION_PLIST_PROD="EBaoProdExportPlist.plist"
 OPTION_PLIST_UAT="EBaoUATExportPlist.plist"
@@ -20,12 +20,23 @@ EXPORT_OPTIONS_PLIST_DIR="$PROJECT_DIR/McDE/Application/"
 
 CONFIG_EBAO_UAT="UAT"
 CONFIG_EBAO_PROD="Release"
-CONFIG_TSRI_UAT="Tsri-UAT"
-CONFIG_TSRI_PROD="Tsri-Release"
 
-while getopts "c:p:" Option
+SCHEME_NAME_EBAOCLOUD="eBaoCloud"
+SCHEME_NAME_TSRI="Tsri"
+
+while getopts "s:c:p:" Option
 do 
   case $Option in 
+    s)
+      case $OPTARG in 
+        $SCHEME_NAME_EBAOCLOUD)
+          SCHEME_NAME=$SCHEME_NAME_EBAOCLOUD
+          ;;
+        $SCHEME_NAME_TSRI)
+          SCHEME_NAME=$SCHEME_NAME_TSRI
+          ;;
+      esac
+      ;;
     c)
       case $OPTARG in 
         $CONFIG_EBAO_UAT)
@@ -33,12 +44,6 @@ do
           ;;
         $CONFIG_EBAO_PROD)
           ARCHIVE_CONFIG_NAME="$CONFIG_EBAO_PROD"
-          ;;
-        $CONFIG_TSRI_UAT)
-          ARCHIVE_CONFIG_NAME="$CONFIG_TSRI_UAT"
-          ;;
-        $CONFIG_TSRI_PROD)
-          ARCHIVE_CONFIG_NAME="$CONFIG_TSRI_PROD"
           ;;
         esac
         ;;
@@ -102,20 +107,20 @@ xcodebuild archive -workspace "$WORKSPACE_PATH" -scheme "$SCHEME_NAME" -configur
 xcodebuild -exportArchive -archivePath "$ARCHIVE_PATH"  -exportPath "$IPA_EXPORT_PATH" -exportOptionsPlist "$EXPORT_OPTIONS_PLIST_PATH" 
 
 
-if [ -o $ARCHIVE_CONFIG_NAME="$CONFIG_EBAO_UAT" -o $ARCHIVE_CONFIG_NAME="$CONFIG_TSRI_UAT" ]; then
-#upload to fir
-  pub="y"
-  echo "✈ -------------------------------------------- ✈"
-  echo "Publish to fir, continue ? y(yes), n(no)"
-  read -a pub -n 1 -t 10
-  if [ $pub == "y" ]; then
-    echo "configuration is $ARCHIVE_CONFIG_NAME."
-    fir publish "$IPA_EXPORT_PATH/$SCHEME_NAME.ipa"
-  else 
-    echo "continue ? y(yes), n(no)"
-    read -a pub -n 1
-  fi
-fi
+# if [ -o $ARCHIVE_CONFIG_NAME="$CONFIG_EBAO_UAT" -o $ARCHIVE_CONFIG_NAME="$CONFIG_TSRI_UAT" ]; then
+# #upload to fir
+#   pub="y"
+#   echo "✈ -------------------------------------------- ✈"
+#   echo "Publish to fir, continue ? y(yes), n(no)"
+#   read -a pub -n 1 -t 10
+#   if [ $pub == "y" ]; then
+#     echo "configuration is $ARCHIVE_CONFIG_NAME."
+#     fir publish "$IPA_EXPORT_PATH/$SCHEME_NAME.ipa"
+#   else 
+#     echo "continue ? y(yes), n(no)"
+#     read -a pub -n 1
+#   fi
+# fi
 
 
 
